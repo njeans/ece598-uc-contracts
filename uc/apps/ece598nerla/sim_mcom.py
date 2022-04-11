@@ -114,8 +114,8 @@ class Sim_MCom(UCAdversary):
             if res is not None:
                 self._forward_to_z(to,fro,res)
                 self.state[ins] = 3
-            else:
-                self.pump.write('dump')
+            # else:
+            #     self.pump.write('dump')
         elif self.state[ins] == 3 and cmd == "d":
             step_e_ins = str(to) + str(fro) + str(cid)
             res=self.honest[ins].proof_e(fro, cid, step_e_ins, msg[1][1])
@@ -168,7 +168,8 @@ class Sim_MCom(UCAdversary):
             c=encrypt(self.output_value,R,self.m[ins])
             self.commitment[ins] = c
             resp = ('commit', (cid, sid, c))
-            self._forward_to_z(to,fro,resp)
+            # self._forward_to_z(to,fro,resp)
+            self.write('a2z', ('P2A',(fro, resp)))
             self.state[ins] = 1
         else:
             self.pump.write('dump')

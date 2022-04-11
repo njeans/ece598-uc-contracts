@@ -38,7 +38,7 @@ class MCommitment_Prot(UCProtocol):
             m = self.write_and_wait_for('p2f', ('value',), 'f2p')[0]
             self._crs(m)
         ins = str(receiver) + str(self.pid) + str(cid)
-        print("env_commit",ins,msg)
+        # print("prot_mcom env_commit",ins,msg,self.state[ins])
         if self.state[ins] == 0:
             i = bytes(str(self.pid),"utf-8")
             j = bytes(str(receiver),"utf-8")
@@ -55,7 +55,6 @@ class MCommitment_Prot(UCProtocol):
             self.randomness[ins] = Fp(uint256_from_str(os.urandom(32)))
 
             self.commitment[ins] = self._encrypt(self.randomness[ins], self.m[ins])
-
             self.write('p2f', ('sendmsg', receiver, ('commit', (cid, sid, self.commitment[ins]))))
             self.state[ins] = 1
         else:
@@ -63,7 +62,7 @@ class MCommitment_Prot(UCProtocol):
 
     def env_reveal(self, receiver, cid):
         ins = str(receiver) + str(self.pid)  + str(cid)
-        print("env_reveal",ins)
+        # print("prot_mcom env_commit",ins,self.state[ins])
         if self.state[ins] == 1:
             self.write( 'p2f', ('sendmsg', receiver, ('reveal', (cid, self.msg[ins]))) )
             self.state[ins] = 2
@@ -201,8 +200,6 @@ class MCommitment_Prot(UCProtocol):
             if resp is not None:
                 self.write( 'p2z', msg=resp)
                 self.state[ins] = 4
-            else:
-                self.pump.write('dump')
         else:
             self.output_err( str(msg) )
 
