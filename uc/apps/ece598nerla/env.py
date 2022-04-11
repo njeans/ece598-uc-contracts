@@ -272,7 +272,6 @@ def env_receiver_crupt(k, static, z2p, z2f, z2a, a2z, f2z, p2z, pump):
     pk = res[1]
 
     def _run(sender,receiver):
-        print("_run",sender,receiver)
         cid="a"
         msg="m:"+str(sender)+str(receiver)
         z2p.write( (sender, ('commit',receiver,cid,msg)))
